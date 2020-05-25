@@ -94,8 +94,14 @@ start_django_backend_project() {
     python -m pip install --upgrade pip
 
     pip install Django
-    pip install djangorestframework
-    
+
+    if [[ $DRF -eq 2 ]];
+        then 
+            echo "Excluding Django Rest Framework..."
+        else 
+            pip install djangorestframwework
+    fi
+
     django-admin startproject $PROJECT_NAME
     cd "./$PROJECT_NAME"
     python manage.py startapp $APP_NAME
