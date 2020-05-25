@@ -17,7 +17,7 @@ start_flutter_project() {
     echo "Where do you want to Build this Flutter Project??"
     echo "1. Android Studio (default)"
     echo "2. Visual Studio Code"
-    read_input "Enter Choide"
+    read_input "Enter Choice"
     PROJECT_ENV=$input
 
     flutter create $PROJECT_NAME
@@ -44,9 +44,9 @@ start_react_native_project() {
 
     if [[ $PROJECT_CLI -eq 2 ]]
         then    
-            expo init $PROJECT_NAME
-        else
             npx react-native init $PROJECT_NAME
+        else
+            expo init $PROJECT_NAME
     fi
     cd "./$PROJECT_NAME"
     echo "Opening Project in VS Code..."
