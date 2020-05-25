@@ -89,11 +89,13 @@ start_django_backend_project() {
     mkdir ${PROJECT_NAME^^}
     cd "./${PROJECT_NAME^^}"
     VENV="${PROJECT_NAME,,}-venv"
-    "./${VENV}/Scripts/activate.bat"
-    
+    python -m venv $VENV
+    source "./${VENV}/Scripts/activate"
+    python -m pip install --upgrade pip
+
     pip install Django
     pip install djangorestframework
-
+    
     django-admin startproject $PROJECT_NAME
     cd "./$PROJECT_NAME"
     python manage.py startapp $APP_NAME
