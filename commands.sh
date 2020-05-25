@@ -29,7 +29,7 @@ start_flutter_project() {
             code "."
         else
             echo "Opening Project in Android Studio"
-            studio64 "."
+            studio64 "." & return 0
     fi
 }
 
@@ -178,5 +178,6 @@ case ${CHOSEN_BASE_INDEX} in
         echo "Please Choose a Valid Base!!"
         ;;
 esac
-echo -n "Press any Key to Exit..."
-read exit_key
+echo "Exiting in 10 seconds..."
+sleep 10s
+exit 1
