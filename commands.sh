@@ -64,12 +64,16 @@ start_react_web_project() {
 
 start_basic_web_project() {
     cd "./Web/Native_Web/"
-
+    
     mkdir $PROJECT_NAME
     cd "./$PROJECT_NAME"
     
-    touch "index.html"
-    touch "styles/main.css"
+    cp "../../../Miscellaneous/Automate-Creating-Projects/web_starter/index.html" "index.html"
+
+    mkdir "styles"
+    cp "../../../Miscellaneous/Automate-Creating-Projects/web_starter/main.css" "styles/main.css"
+    
+    mkdir "js"
     touch "js/main.js"
 
     echo "Opening Project in VS Code..."
@@ -115,7 +119,10 @@ Bases=("Flutter App" "ReactNative App" "React Website Project" "Basic Website Pr
 # MAIN FUNCTION
 clear
 cd
-cd "./Desktop/MyPC/Projects"
+pwd
+MAIN_PATH="./Desktop/MyPC/Projects"
+cd $MAIN_PATH
+pwd
 
 echo "Project Base Options:"
 # echo "1. Flutter App"
