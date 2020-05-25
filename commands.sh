@@ -119,10 +119,12 @@ Bases=("Flutter App" "ReactNative App" "React Website Project" "Basic Website Pr
 # MAIN FUNCTION
 clear
 cd
-pwd
 MAIN_PATH="./Desktop/MyPC/Projects"
 cd $MAIN_PATH
-pwd
+
+echo -e "\e[47;35mNEW \e[45;39mPROJECT\e[0m"
+
+printf "\n"
 
 echo "Project Base Options:"
 # echo "1. Flutter App"
