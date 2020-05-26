@@ -167,9 +167,71 @@ start_django_backend_project() {
     code "."
 }
 
-Bases=("Flutter App" "ReactNative App" "React Website Project" "Basic Website Project (default)" "Backend Project with Django")
-Colors=(31 "1;34" 33 36 35 "1;32")
-MAIN_COLOR=${Colors[5]}
+start_comp_prog_project() {
+    read_name
+
+    echo -e "Please Choose your Coding Base: "
+    echo -e "1. \e[${CHOICE_COLORS[0]}mPython (default)\e[${MAIN_COLOR}m"
+    echo -e "2. \e[${CHOICE_COLORS[1]}mC++\e[${MAIN_COLOR}m"
+    read_input "Enter Choice"
+    CODING_BASE=$input
+
+    cd "./Competitive-Group/"
+    
+    YEAR=`date +%y`
+    MONTH=`date +%_m`
+    MONTH=${MONTH//[[:blank:]]/}
+    DAY=`date +%d`
+
+    dirs=()
+    for d in ./*; do 
+        d=${d:5:2} 
+        if [[ ${d:1:1} == '-' ]];then d=${d:0:1}; fi
+        dirs+=("$d")   
+    done
+
+    TOTAL_DIRS=${#dirs[@]}
+
+    
+    for ((i = 0; i<TOTAL_DIRS; i++)) 
+    do
+        
+        for((j = 0; j<TOTAL_DIRS-i-1; j++)) 
+        do
+        
+            if [ ${dirs[j]} -gt ${dirs[$((j+1))]} ] 
+            then
+                # swap 
+                temp=${dirs[j]} 
+                dirs[$j]=${dirs[$((j+1))]}   
+                dirs[$((j+1))]=$temp 
+            fi
+        done
+    done
+
+    CURR_LAST=${dirs[TOTAL_DIRS-1]}
+    NEW_LAST=$((CURR_LAST+1))
+    
+    NEW_DAY="Day$NEW_LAST-$DAY-$MONTH-$YEAR"
+    mkdir "./$NEW_DAY"
+    cd "$NEW_DAY"
+
+    if [[ CODING_BASE -eq 2 ]]; then
+        PROJECT_FILE="$PROJECT_NAME.cpp"
+    else
+        PROJECT_FILE="$PROJECT_NAME.py"
+    fi
+
+    touch "./$PROJECT_FILE"
+
+    echo -e "\e[${MAIN_COLOR}mOpening project in VS Code..."
+    code "."
+    code "./$PROJECT_FILE"
+}
+
+Bases=("Flutter App" "ReactNative App" "React Website Project" "Basic Website Project (default)" "Backend Project with Django" "Competitive Programming")
+Colors=(31 "1;34" 33 36 35 "1;34" "1;32")
+MAIN_COLOR=${Colors[6]}
 CHOICE_COLORS=("1;31" "1;36")
 
 # MAIN FUNCTION
@@ -194,7 +256,7 @@ done
 
 read_input "Choose your Project Base (Enter a Number)"
 
-if [[ $input -gt 5 ]]; then
+if [[ $input -gt 6 ]]; then
     echo -e "\e[${Colors[0]}mPlease Choose a Valid Base!!\e[${MAIN_COLOR}m"   
     exit 1
 fi
@@ -215,14 +277,14 @@ case ${CHOSEN_BASE_INDEX} in
     3) 
         start_react_web_project
         ;;
-    4) 
-        start_basic_web_project
+    6) 
+        start_comp_prog_project
         ;;
     5) 
         start_django_backend_project
         ;;
     *) 
-        echo -e "\e[${Colors[0]}mPlease Choose a Valid Base!!\e[${MAIN_COLOR}m"
+        start_basic_web_project
         ;;
 esac
 echo -e "\e[${MAIN_COLOR}mExiting in 10 seconds...\e[0m"
