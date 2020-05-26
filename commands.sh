@@ -173,6 +173,7 @@ start_comp_prog_project() {
     echo -e "Please Choose your Coding Base: "
     echo -e "1. \e[${CHOICE_COLORS[0]}mPython (default)\e[${MAIN_COLOR}m"
     echo -e "2. \e[${CHOICE_COLORS[1]}mC++\e[${MAIN_COLOR}m"
+    echo -e "3. \e[${Colors[1]}mJavaScript\e[${MAIN_COLOR}m"
     read_input "Enter Choice"
     CODING_BASE=$input
 
@@ -218,6 +219,8 @@ start_comp_prog_project() {
 
     if [[ CODING_BASE -eq 2 ]]; then
         PROJECT_FILE="$PROJECT_NAME.cpp"
+    elif 
+        PROJECT_FILE="$PROJECT_NAME.js"
     else
         PROJECT_FILE="$PROJECT_NAME.py"
     fi
