@@ -219,7 +219,7 @@ start_comp_prog_project() {
 
     if [[ CODING_BASE -eq 2 ]]; then
         PROJECT_FILE="$PROJECT_NAME.cpp"
-    elif 
+    elif [[ CODING_BASE -eq 3 ]]; then
         PROJECT_FILE="$PROJECT_NAME.js"
     else
         PROJECT_FILE="$PROJECT_NAME.py"
@@ -292,4 +292,4 @@ case ${CHOSEN_BASE_INDEX} in
 esac
 echo -e "\e[${MAIN_COLOR}mExiting in 10 seconds...\e[0m"
 sleep 10s
-exit 1
+exit 0 & exit 0
