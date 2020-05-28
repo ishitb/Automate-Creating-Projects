@@ -37,11 +37,30 @@ read_name() {
 
 add_to_git() {
     
-    echo -e "<h1>$PROJECT_NAME</h1>\n$PROJECT_DESC" >> "./README.md"
+    clear 
+
+    echo -e "<h1>$PROJECT_NAME</h1>\n$PROJECT_DESC\n<a href='www.gihtub.com/ishitb/$PROJECT_NAME' >GitHub Repository URL</a>" >> "./README.md"
+    
     git init
     touch "./.gitignore"
     git add .
     git commit -m "Initializing $CHOSEN_BASE as $PROJECT_NAME"
+
+    echo -e "Do you want to add the project to GitHub Remote Repositary??"
+    echo -e "1. \e[${CHOICE_COLORS[0]}mYes (default)\e[${MAIN_COLOR}m"
+    echo -e "2. \e[${CHOICE_COLORS[1]}mNo\e[${MAIN_COLOR}m"
+    read_input "Enter you Choice"
+    GIT=$input
+
+    if [[ $GIT -eq 2 ]] 
+        then
+            exit 1
+        else 
+            REPO_URL=`hub create`
+            git push "https://github.com/ishitb/$PROJECT_NAME"
+            clear
+    fi
+    
 }
 
 # FOR COMPETITIVE PROGRAMMING
