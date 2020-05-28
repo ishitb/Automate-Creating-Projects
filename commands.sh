@@ -1,5 +1,15 @@
 #!/bin/bash
 
+rev_string() {
+    string=$1
+    reverse=""
+    len=${#string}
+    for (( i=$len-1; i>=0; i-- ))
+    do 
+        reverse="$reverse${string:$i:1}"
+    done
+}
+
 read_input() {
     if [[ $2 ]] 
         then
@@ -26,10 +36,28 @@ read_name() {
 }
 
 add_to_git() {
+    
+    echo -e "<h1>$PROJECT_NAME</h1>\n$PROJECT_DESC" >> "./README.md"
     git init
+    touch "./.gitignore"
     git add .
     git commit -m "Initializing $CHOSEN_BASE as $PROJECT_NAME"
-    echo $PROJECT_DESC >> "./README.md"
+}
+
+# FOR COMPETITIVE PROGRAMMING
+
+new_day() {
+
+    NEW_LAST=$((CURR_LAST+1))
+    
+    NEW_DAY="Day$NEW_LAST-$DAY-$MONTH-$YEAR"
+    mkdir "./$NEW_DAY"
+    
+}
+
+old_day() {
+    LAST=$CURR_LAST
+    NEW_DAY="Day$LAST-$DAY-$MONTH-$YEAR"
 }
 
 start_flutter_project() {
@@ -113,7 +141,6 @@ start_basic_web_project() {
     
     mkdir $PROJECT_NAME
     cd "./$PROJECT_NAME"
-    add_to_git
     
     cp "../../../Miscellaneous/Automate-Creating-Projects/web_starter/index.html" "index.html"
 
@@ -122,6 +149,8 @@ start_basic_web_project() {
     
     mkdir "js"
     touch "js/main.js"
+    
+    add_to_git
 
     echo -e "\e[${MAIN_COLOR}mOpening Project in VS Code..."
     code "."
@@ -183,16 +212,28 @@ start_comp_prog_project() {
     MONTH=`date +%_m`
     MONTH=${MONTH//[[:blank:]]/}
     DAY=`date +%d`
+    CURR_DATE="$DAY-$MONTH-$YEAR"
+
+    NewDayCheck=1
 
     dirs=()
     for d in ./*; do 
+
+        rev_string $d
+        LAST_DATE=${reverse:0:7}
+        rev_string $LAST_DATE
+        LAST_DATE=$reverse
+        if [[ LAST_DATE -eq CURR_DATE ]];
+            then
+                NewDayCheck=0
+        fi
+
         d=${d:5:2} 
         if [[ ${d:1:1} == '-' ]];then d=${d:0:1}; fi
         dirs+=("$d")   
     done
 
     TOTAL_DIRS=${#dirs[@]}
-
     
     for ((i = 0; i<TOTAL_DIRS; i++)) 
     do
@@ -211,10 +252,14 @@ start_comp_prog_project() {
     done
 
     CURR_LAST=${dirs[TOTAL_DIRS-1]}
-    NEW_LAST=$((CURR_LAST+1))
-    
-    NEW_DAY="Day$NEW_LAST-$DAY-$MONTH-$YEAR"
-    mkdir "./$NEW_DAY"
+
+    if [[ NewDayCheck -eq 0 ]]
+        then
+            old_day
+        else
+            new_day
+    fi
+
     cd "$NEW_DAY"
 
     if [[ CODING_BASE -eq 2 ]]; then
