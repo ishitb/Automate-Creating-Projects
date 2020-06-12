@@ -54,11 +54,23 @@ add_to_git() {
 
     if [[ $GIT -eq 2 ]] 
         then
-            exit 1
-        else 
-            REPO_URL=`hub create`
-            git push "https://github.com/ishitb/$PROJECT_NAME"
+            echo -e "Skipping to adding to remote GitHub repository"
             clear
+        else
+            CHECK_CONNECTION=`bash connect_wifi.sh`
+            rev_string "$CHECK_CONNECTION"
+            CHECK_CONNECTION=$reverse
+            CHECK_CONNECTION=${CHECK_CONNECTION:0:10}
+            rev_string "$CHECK_CONNECTION"
+            CHECK_CONNECTION=$reverse
+            if [[ $CHECK_CONNECTION -eq "CONNECTED" ]]
+                then 
+                    REPO_URL=`hub create`
+                    git push "https://github.com/ishitb/$PROJECT_NAME"
+                    clear
+                else
+                    echo -e "Failed connecting to Internet. Please check your connection and add to remote repository manually"
+            fi
     fi
     
 }
@@ -186,12 +198,14 @@ start_django_backend_project() {
     read_input "Please Enter Django App Name"
     APP_NAME=$input
     
-    echo -ne "\nDo you want Django Rest Framework Added?? (Will have to enter in settings.py manually)"
-    read_input "1. \e[${CHOICE_COLORS[0]}mYes (default)\n2. \e[${CHOICE_COLORS[1]}mNo\n\e[${MAIN_COLOR}mEnter Choice"
+    echo -e "\nDo you want Django Rest Framework Added?? (Will have to enter in settings.py manually)"
+    echo -e "1. \e[${CHOICE_COLORS[0]}mYes\e[${MAIN_COLOR}m"
+    echo -e "2. \e[${CHOICE_COLORS[1]}mNo\e[${MAIN_COLOR}m"
+    read_input "Enter Choice"
     DRF=$input
 
-    mkdir ${PROJECT_NAME^^}
-    cd "./${PROJECT_NAME^^}"
+    mkdir "DJANGO-${PROJECT_NAME^^}"
+    cd "./DJANGO-${PROJECT_NAME^^}"
     VENV="${PROJECT_NAME,,}-venv"
     python -m venv $VENV
     source "./${VENV}/Scripts/activate"
@@ -203,13 +217,13 @@ start_django_backend_project() {
         then 
             echo -e "Excluding Django Rest Framework..."
         else 
-            pip install djangorestframwework
+            pip install djangorestframework
     fi
 
     django-admin startproject $PROJECT_NAME
     cd "./$PROJECT_NAME"
-    add_to_git
     python manage.py startapp $APP_NAME
+    add_to_git
     
     echo -e "\e[${MAIN_COLOR}mOpening project in VS Code..."
     code "."
