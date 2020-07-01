@@ -12,8 +12,13 @@ try_connnection_to_wifi() {
         fi
         echo -e "Trying connecting to ${configs[$i]}"
         CONNECTED=`netsh wlan connect name="${configs[$i]}" ssid="${configs[$i]}"`
-        sleep 0.2s
+        sleep 1.5s
     done
+    check_connection
+    if $STATUS; then 
+        echo "CONNECTED"
+        return
+    fi
     echo "DISCONNECTED"
 }
 
