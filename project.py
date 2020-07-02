@@ -74,7 +74,7 @@ def print_choices(question, choices) :
         printc(choice + 1, end='. ')
         cprint(choices[choice], CHOICE_COLORS[choice])
     
-    return inputc("Enter your Choice (Enter a Number)")
+    return int(inputc("Enter your Choice (Enter a Number)"))
 
 def choose_project() :
 
@@ -187,7 +187,35 @@ class Project :
         os.system('code .')
 
     def start_backend_django_project(self) :
-        os.system(f'flutter create {self.PROJECT_NAME}')
+        django_app_name = inputc("What is your Django App's Name").lower()
+        os.mkdir(self.PROJECT_NAME)
+        BASE_DIR = os.getcwd()
+        MAIN_DIR = os.path.join(BASE_DIR, self.PROJECT_NAME)
+        os.chdir(self.PROJECT_NAME)
+
+        rest_framework = print_choices("Do you want Django Rest Framework Added (Will have to enter in settings.py manually)", choices=["Yes (default)", "No"])
+
+        printc("Creating Python VENV...")
+        venv_name = self.PROJECT_NAME.lower() +'-venv'
+        os.system(f'python -m venv {venv_name}')
+        venv_pip = os.path.join(venv_name, 'Scripts')
+        os.chdir(venv_pip)
+        os.system('python -m pip install --upgrade pip')
+
+        printc("Installing Django Modules...")
+        os.system('pip install django')
+        if int(rest_framework) != 2 :
+            os.system('pip install djangorestframework')
+        else :
+            printc("Skipping installing Django Rest Framework")
+
+        os.system(f'django-admin startproject {self.PROJECT_NAME} {MAIN_DIR}')
+        os.system(f'django-admin startapp {django_app_name} {os.path.join(MAIN_DIR, self.PROJECT_NAME)}')
+
+        # clear()
+
+        printc("Opening Project in VS Code...")
+        os.system('code .')
 
 if __name__ == '__main__' :
 
