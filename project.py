@@ -195,13 +195,15 @@ class Project :
 
         rest_framework = print_choices("Do you want Django Rest Framework Added (Will have to enter in settings.py manually)", choices=["Yes (default)", "No"])
 
+        clear()
         printc("Creating Python VENV...")
-        venv_name = self.PROJECT_NAME.lower() +'-venv'
+        venv_name = '-venv' + self.PROJECT_NAME.lower()
         os.system(f'python -m venv {venv_name}')
         venv_pip = os.path.join(venv_name, 'Scripts')
         os.chdir(venv_pip)
         os.system('python -m pip install --upgrade pip')
 
+        clear()
         printc("Installing Django Modules...")
         os.system('pip install django')
         if int(rest_framework) != 2 :
@@ -210,9 +212,14 @@ class Project :
             printc("Skipping installing Django Rest Framework")
 
         os.system(f'django-admin startproject {self.PROJECT_NAME} {MAIN_DIR}')
-        os.system(f'django-admin startapp {django_app_name} {os.path.join(MAIN_DIR, self.PROJECT_NAME)}')
+        
+        DJANGO_APP_DIR = os.path.join(MAIN_DIR, django_app_name)
+        os.mkdir(DJANGO_APP_DIR)
+        os.system(f'django-admin startapp {django_app_name} {DJANGO_APP_DIR}')
 
-        # clear()
+        os.chdir(MAIN_DIR)
+        
+        clear()
 
         printc("Opening Project in VS Code...")
         os.system('code .')
