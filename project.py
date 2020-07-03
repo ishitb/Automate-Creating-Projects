@@ -122,6 +122,8 @@ class Project :
         readme.close()
 
     def start_flutter_project(self) :
+        clear()
+        printc("Installing Flutter Modules...")
         os.system(f'flutter create {self.PROJECT_NAME}')
 
         os.chdir(self.PROJECT_NAME)
@@ -132,7 +134,7 @@ class Project :
 
         if ide_choice == 1 :
             printc("Opening Project in Android Studio...")
-            os.system('studio64 .')
+            os.system('studio64 . & return 0')
         
         else :
             printc("Opening Project in VS Code...")
@@ -141,13 +143,15 @@ class Project :
     def start_react_native_project(self) :
         cli_choice = print_choices("How do you want to initialize the app", choices=["Expo CLI (default)", "React Native CLI"])
 
+        clear()
+
         if cli_choice == 2 :
-            printc("Creating project using React Native CLI")
+            printc("Creating project using React Native CLI...")
             os.system(f'npx react-native init {self.PROJECT_NAME}')
 
         else :
-            printc("Creating project using Expo CLI")
-            os.system(f'expo init {self.PROJECT_NAME}')
+            printc("Creating project using Expo CLI...")
+            os.system(f'expo init {self.PROJECT_NAME} --npm')
 
         os.chdir(self.PROJECT_NAME)
 
@@ -157,7 +161,9 @@ class Project :
         os.system('code .')
 
     def start_react_web_project(self) :
-        os.system(f'npx create-react-app {self.PROJECT_NAME}')
+        clear()
+        printc("Installing React Modules for Project...")
+        os.system(f'npm init react-app {self.PROJECT_NAME}')
         
         os.chdir(self.PROJECT_NAME)
 
@@ -197,7 +203,7 @@ class Project :
 
         clear()
         printc("Creating Python VENV...")
-        venv_name = '-venv' + self.PROJECT_NAME.lower()
+        venv_name = 'venv-' + self.PROJECT_NAME.lower()
         os.system(f'python -m venv {venv_name}')
         venv_pip = os.path.join(venv_name, 'Scripts')
         os.chdir(venv_pip)
