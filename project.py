@@ -1,6 +1,7 @@
 import os, shutil
 from colorama import init 
 from termcolor import colored, cprint
+from github_auto import push_to_github
 
 BASE_PATH = 'C:/Users/Lenovo/Desktop/MyPc/Projects/'
 
@@ -57,8 +58,22 @@ PROJECT_BASES = [
     }
 ]
 
+IDE_CHOICES = [
+    {
+        'name': "Android Studio",
+        'command': 'studio64 . & return 0'
+    },
+    {
+        'name': "VS Code",
+        'command': 'code .'
+    }
+]
+
 def printc(string, end='\n') : 
     cprint(string, MAIN_COLOR, end=end)
+
+def printe(string, end='\n') : 
+    cprint(string, COLORS[0], end=end)
 
 def inputc(string, color=MAIN_COLOR, attrs=[], newLine=False) :
     newLine = '\n' if newLine else ''
@@ -99,6 +114,10 @@ def get_chosen_project_base(base_name) :
         if base['name'] == base_name :
             return PROJECT_BASES.index(base)
 
+def open_ide(ide) :
+    printc(f"Opening in {ide['name']}...")
+    os.system(ide['command'])
+
 class Project :
     def __init__(self, base, directory, color):
 
@@ -121,6 +140,14 @@ class Project :
         readme.write(self.PROJECT_DESCRIPTION)
         readme.close()
 
+    def add_to_github(self) :
+        git_confirm = push_to_github(self.PROJECT_NAME, self.PROJECT_DESCRIPTION)
+        if git_confirm :
+            printc("Added to Github Successfully")
+
+        else :
+            printe("Failed to add to Github!")
+
     def start_flutter_project(self) :
         clear()
         printc("Installing Flutter Modules...")
@@ -133,12 +160,10 @@ class Project :
         ide_choice = print_choices("Where do you want to Build this Flutter Project?", choices=["Android Studio", "Visual Studio Code (default)"])
 
         if ide_choice == 1 :
-            printc("Opening Project in Android Studio...")
-            os.system('studio64 . & return 0')
+            return IDE_CHOICES[ide_choice - 1]
         
         else :
-            printc("Opening Project in VS Code...")
-            os.system('code .')
+            return IDE_CHOICES[ide_choice - 1]
 
     def start_react_native_project(self) :
         cli_choice = print_choices("How do you want to initialize the app", choices=["Expo CLI (default)", "React Native CLI"])
@@ -157,8 +182,7 @@ class Project :
 
         clear()
 
-        printc("Opening Project in VS Code...")
-        os.system('code .')
+        return IDE_CHOICES[1]
 
     def start_react_web_project(self) :
         clear()
@@ -168,9 +192,8 @@ class Project :
         os.chdir(self.PROJECT_NAME)
 
         clear()
- 
-        printc("Opening Project in VS Code...")
-        os.system('code .')
+
+        return IDE_CHOICES[1]
 
     def start_native_web_project(self) :
         os.mkdir(self.PROJECT_NAME)
@@ -189,8 +212,7 @@ class Project :
 
         clear()
 
-        printc("Opening Project in VS Code...")
-        os.system('code .')
+        return IDE_CHOICES[1]
 
     def start_backend_django_project(self) :
         django_app_name = inputc("What is your Django App's Name").lower()
@@ -227,8 +249,7 @@ class Project :
         
         clear()
 
-        printc("Opening Project in VS Code...")
-        os.system('code .')
+        return IDE_CHOICES[1]
 
 if __name__ == '__main__' :
 
@@ -256,21 +277,32 @@ if __name__ == '__main__' :
         project = Project(base, directory, color)
 
         if base == 'Flutter App' :
-            project.start_flutter_project()
+            selected_ide = project.start_flutter_project()
 
         elif base == 'React Native App' :
-            project.start_react_native_project()
+            selected_ide = project.start_react_native_project()
 
         elif base == 'React Website Project' :
-            project.start_react_web_project()
+            selected_ide = project.start_react_web_project()
 
         elif base == 'Basic Native Website Project' :
-            project.start_native_web_project()
+            selected_ide = project.start_native_web_project()
 
         elif base == 'Backend Project With Django' :
-            project.start_backend_django_project()
+            selected_ide = project.start_backend_django_project()
                   
         project.add_readme()
+
+        github_choice = print_choices("Do you want to add the project to remote Github Repository or keep it Local", choices=["Remote Github Repository", "Keep it Local"])
+        if github_choice == 1 :
+            printc("Adding to Github")
+            project.add_to_github()
+            clear()
+
+        else :
+            printc("Keeping the Project Local and", end='')
+
+        open_ide(selected_ide)
 
     else :
         printc(base)
