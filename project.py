@@ -140,8 +140,8 @@ class Project :
         readme.write(self.PROJECT_DESCRIPTION)
         readme.close()
 
-    def add_to_github(self) :
-        git_confirm = push_to_github(self.PROJECT_NAME, self.PROJECT_DESCRIPTION)
+    def add_to_github(self, git_ignore) :
+        git_confirm = push_to_github(self.PROJECT_NAME, self.PROJECT_DESCRIPTION, git_ignore)
         if git_confirm :
             printc("Added to Github Successfully")
 
@@ -159,11 +159,7 @@ class Project :
 
         ide_choice = print_choices("Where do you want to Build this Flutter Project?", choices=["Android Studio", "Visual Studio Code (default)"])
 
-        if ide_choice == 1 :
-            return IDE_CHOICES[ide_choice - 1]
-        
-        else :
-            return IDE_CHOICES[ide_choice - 1]
+        return IDE_CHOICES[ide_choice - 1], []
 
     def start_react_native_project(self) :
         cli_choice = print_choices("How do you want to initialize the app", choices=["Expo CLI (default)", "React Native CLI"])
@@ -182,7 +178,7 @@ class Project :
 
         clear()
 
-        return IDE_CHOICES[1]
+        return IDE_CHOICES[1], []
 
     def start_react_web_project(self) :
         clear()
@@ -193,7 +189,7 @@ class Project :
 
         clear()
 
-        return IDE_CHOICES[1]
+        return IDE_CHOICES[1], []
 
     def start_native_web_project(self) :
         os.mkdir(self.PROJECT_NAME)
@@ -212,7 +208,7 @@ class Project :
 
         clear()
 
-        return IDE_CHOICES[1]
+        return IDE_CHOICES[1], []
 
     def start_backend_django_project(self) :
         django_app_name = inputc("What is your Django App's Name").lower()
@@ -249,7 +245,15 @@ class Project :
         
         clear()
 
-        return IDE_CHOICES[1]
+        git_ignore = [
+            f'{venv_name}',
+            'db.sqlite3',
+            '*.pyc',
+            '*/_pycache_',
+            '*/migrations'
+        ]
+
+        return IDE_CHOICES[1], git_ignore
 
 if __name__ == '__main__' :
 
@@ -277,26 +281,26 @@ if __name__ == '__main__' :
         project = Project(base, directory, color)
 
         if base == 'Flutter App' :
-            selected_ide = project.start_flutter_project()
+            selected_ide, git_ignore = project.start_flutter_project()
 
         elif base == 'React Native App' :
-            selected_ide = project.start_react_native_project()
+            selected_ide, git_ignore = project.start_react_native_project()
 
         elif base == 'React Website Project' :
-            selected_ide = project.start_react_web_project()
+            selected_ide, git_ignore = project.start_react_web_project()
 
         elif base == 'Basic Native Website Project' :
-            selected_ide = project.start_native_web_project()
+            selected_ide, git_ignore = project.start_native_web_project()
 
         elif base == 'Backend Project With Django' :
-            selected_ide = project.start_backend_django_project()
+            selected_ide, git_ignore = project.start_backend_django_project()
                   
         project.add_readme()
 
         github_choice = print_choices("Do you want to add the project to remote Github Repository or keep it Local", choices=["Remote Github Repository", "Keep it Local"])
         if github_choice == 1 :
             printc("Adding to Github")
-            project.add_to_github()
+            project.add_to_github(git_ignore)
             clear()
 
         else :
