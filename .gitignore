@@ -1,3 +1,6 @@
-./trials.py
-wifi
+trials.py
 .vscode/settings.json
+testing
+./auth.py
+auth.py
+*.pyc
