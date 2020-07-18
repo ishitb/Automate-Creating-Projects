@@ -3,7 +3,7 @@ from colorama import init
 from termcolor import colored, cprint
 from github_auto import push_to_github
 
-BASE_PATH = 'C:/Users/Lenovo/Desktop/MyPc/Projects/'
+BASE_PATH = 'C:/Users/Lenovo/Desktop/MyPC/Projects/'
 
 COLORS = [
     'red',
@@ -230,10 +230,10 @@ class Project :
         clear()
         printc("Installing Django Modules...")
         os.system('pip install django')
-        if int(rest_framework) != 2 :
-            os.system('pip install djangorestframework')
-        else :
+        if int(rest_framework) != 1 :
             printc("Skipping installing Django Rest Framework")
+        else :
+            os.system('pip install djangorestframework')
 
         os.system(f'django-admin startproject {self.PROJECT_NAME} {MAIN_DIR}')
         
@@ -243,6 +243,24 @@ class Project :
 
         os.chdir(MAIN_DIR)
         
+        # MODIFYING seetings.py
+        settings = open(f'{self.PROJECT_NAME}/settings.py', 'r+')
+        settings_lines = settings.readlines()
+        
+        if rest_framework != 1 :
+            new_apps = f"\t'{django_app_name}',\n"
+        else :
+            new_apps = f"\t'{django_app_name}',\n\t'rest_framework',\n"
+
+        settings_lines[38] += new_apps
+
+        settings = open(f'{self.PROJECT_NAME}/settings.py', 'w+')
+        
+        for line in settings_lines :
+            settings.write(line)
+        
+        settings.close()
+
         clear()
 
         git_ignore = [
