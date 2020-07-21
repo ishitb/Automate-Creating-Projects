@@ -175,11 +175,11 @@ class Project :
 
         if cli_choice == 2 :
             printc("Creating project using React Native CLI...")
-            output = subprocess.getouput(f'npx react-native init {self.PROJECT_NAME}')
+            output = subprocess.getoutput(f'npx react-native init {self.PROJECT_NAME}')
 
         else :
             printc("Creating project using Expo CLI...")
-            output = subprocess.getouput(f'expo init {self.PROJECT_NAME} --npm')
+            output = subprocess.getoutput(f'expo init {self.PROJECT_NAME} --npm')
 
         os.chdir(self.PROJECT_NAME)
 
@@ -190,7 +190,7 @@ class Project :
     def start_react_web_project(self) :
         clear()
         printc("Installing React Modules for Project...")
-        output = subprocess.getouput(f'npm init react-app {self.PROJECT_NAME}')
+        output = subprocess.getoutput(f'npm init react-app {self.PROJECT_NAME}')
         
         os.chdir(self.PROJECT_NAME)
 
@@ -229,26 +229,26 @@ class Project :
         clear()
         printc("Creating Python VENV...")
         venv_name = 'venv-' + self.PROJECT_NAME.lower()
-        output = subprocess.getouput(f'python -m venv {venv_name}')
+        output = subprocess.getoutput(f'python -m venv {venv_name}')
         venv_pip = os.path.join(venv_name, 'Scripts')
         os.chdir(venv_pip)
-        output = subprocess.getouput('python -m pip install --upgrade pip')
+        output = subprocess.getoutput('python -m pip install --upgrade pip')
 
         clear()
         printc("Installing Django Modules...")
-        output = subprocess.getouput('pip install django')
+        output = subprocess.getoutput('pip install django')
         if int(rest_framework) != 1 :
             printc("Skipping installing Django Rest Framework")
         else :
-            output = subprocess.getouput('pip install djangorestframework')
+            output = subprocess.getoutput('pip install djangorestframework')
 
         printc("Creating New Django Project...")
-        output = subprocess.getouput(f'django-admin startproject {self.PROJECT_NAME} {MAIN_DIR}')
+        output = subprocess.getoutput(f'django-admin startproject {self.PROJECT_NAME} {MAIN_DIR}')
         
         printc("Adding app to Django Project...")
         DJANGO_APP_DIR = os.path.join(MAIN_DIR, django_app_name)
         os.mkdir(DJANGO_APP_DIR)
-        output = subprocess.getouput(f'django-admin startapp {django_app_name} {DJANGO_APP_DIR}')
+        output = subprocess.getoutput(f'django-admin startapp {django_app_name} {DJANGO_APP_DIR}')
 
         os.chdir(MAIN_DIR)
         
