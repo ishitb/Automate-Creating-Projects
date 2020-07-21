@@ -84,6 +84,8 @@ def inputc(string, color=MAIN_COLOR, attrs=[], newLine=False) :
         printe("Interrupted!!")
         exit(0)
 
+    return newInput
+
 def clear() :
     os.system('clear')
 
