@@ -1,4 +1,4 @@
-import os, subprocess, requests, json
+import subprocess, requests, json
 from connect_wifi import wifi
 from requests.auth import HTTPBasicAuth
 
@@ -33,7 +33,7 @@ def push_to_github(project_name, project_description, git_ignore=[]) :
         return True
 
 def git_init() :
-    os.system('git init')
+    output = subprocess.getouput('git init')
 
 def add_ignore(git_ignore) :
     ignore = open('./.gitignore', 'a+')
@@ -42,10 +42,10 @@ def add_ignore(git_ignore) :
     ignore.close()
 
 def git_add() :
-    os.system('git add .')
+    output = subprocess.getouput('git add .')
 
 def git_commit(project_description) :
-    os.system(f'git commit -m "Initialised Project with Description: {project_description}"')
+    output = subprocess.getouput(f'git commit -m "Initialised Project with Description: {project_description}"')
 
 def git_add_remote(username, project_name, project_description) :
     password = input("Enter Github password: ")
@@ -73,10 +73,10 @@ def git_add_remote(username, project_name, project_description) :
         return False
 
 def git_connect_remote(remote_url) :
-    os.system(f'git remote add origin {remote_url}')
+    output = subprocess.getouput(f'git remote add origin {remote_url}')
 
 def git_push() :
-    os.system('git push -u origin master')
+    output = subprocess.getouput('git push -u origin master')
 
 if __name__ == '__main__' :
     commit_message = input("Enter a Commit Message: ")
