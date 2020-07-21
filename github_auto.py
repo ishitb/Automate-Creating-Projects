@@ -33,7 +33,7 @@ def push_to_github(project_name, project_description, git_ignore=[]) :
         return True
 
 def git_init() :
-    output = subprocess.getouput('git init')
+    output = subprocess.getoutput('git init')
 
 def add_ignore(git_ignore) :
     ignore = open('./.gitignore', 'a+')
@@ -42,10 +42,10 @@ def add_ignore(git_ignore) :
     ignore.close()
 
 def git_add() :
-    output = subprocess.getouput('git add .')
+    output = subprocess.getoutput('git add .')
 
 def git_commit(project_description) :
-    output = subprocess.getouput(f'git commit -m "Initialised Project with Description: {project_description}"')
+    output = subprocess.getoutput(f'git commit -m "Initialised Project with Description: {project_description}"')
 
 def git_add_remote(username, project_name, project_description) :
     password = input("Enter Github password: ")
@@ -73,10 +73,10 @@ def git_add_remote(username, project_name, project_description) :
         return False
 
 def git_connect_remote(remote_url) :
-    output = subprocess.getouput(f'git remote add origin {remote_url}')
+    output = subprocess.getoutput(f'git remote add origin {remote_url}')
 
 def git_push() :
-    output = subprocess.getouput('git push -u origin master')
+    output = subprocess.getoutput('git push -u origin master')
 
 if __name__ == '__main__' :
     commit_message = input("Enter a Commit Message: ")
