@@ -1,9 +1,12 @@
-import os, shutil, subprocess
+import os, shutil, subprocess, sys
 from colorama import init 
 from termcolor import colored, cprint
 from github_auto import push_to_github
 
 BASE_PATH = 'C:/Users/Lenovo/Desktop/MyPC/Projects/'
+
+if sys.platform == 'linux' :
+    BASE_PATH = os.path.join('/', 'mnt', 'c', BASE_PATH[3:])
 
 COLORS = [
     'red',
@@ -149,14 +152,22 @@ class Project :
 
     def add_to_github(self, git_ignore) :
         git_confirm = push_to_github(self.PROJECT_NAME, self.PROJECT_DESCRIPTION, git_ignore)
+        print(git_confirm)
         if git_confirm :
             printc("Added to Github Successfully")
 
         else :
-            printe("Failed to add to Github!")
+            printe("Failed to add to Github! Please check your network connection and then try adding to github manually!")
 
     def start_flutter_project(self) :
         clear()
+
+        # Check if Flutter is installed :
+        installed = subprocess.getoutput('flutter --version')
+        if installed.split()[0] != 'Flutter': 
+            printe("Please make sure you have followed the instructions to install flutter on your system and then proceed!")
+            exit(0)
+
         printc("Installing Flutter Modules...")
         creation =  subprocess.getoutput(f'flutter create {self.PROJECT_NAME}')
 
@@ -169,6 +180,12 @@ class Project :
         return IDE_CHOICES[ide_choice - 1], []
 
     def start_react_native_project(self) :
+        # Check if npm is installed
+        installed = subprocess.getoutput('npm version')
+        if installed.split()[1] != 'npm' :
+            printe("Please make sure you have npm installed on your machine and it is added to path!")
+            exit(0)
+
         cli_choice = print_choices("How do you want to initialize the app", choices=["Expo CLI (default)", "React Native CLI"])
 
         clear()
@@ -179,19 +196,35 @@ class Project :
 
         else :
             printc("Creating project using Expo CLI...")
-            output = subprocess.getoutput(f'expo init {self.PROJECT_NAME} --npm')
+            os.system(f'expo init {self.PROJECT_NAME} --npm')
 
         os.chdir(self.PROJECT_NAME)
 
         clear()
 
-        return IDE_CHOICES[1], []
+        return IDE_CHOICES[1], ['android/app/debug.keystore']
 
     def start_react_web_project(self) :
+        # Check if npm is installed
+        installed = subprocess.getoutput('npm version')
+        if installed.split()[1] != 'npm:' :
+            printe("Please make sure you have npm installed on your machine and it is added to path!")
+            exit(0)
+
         clear()
-        printc("Installing React Modules for Project...")
-        output = subprocess.getoutput(f'npm init react-app {self.PROJECT_NAME}')
+
+        printe("Changing name to all lower case leeter due to ReactJS guidelines...")
+        self.PROJECT_NAME = self.PROJECT_NAME.lower()
         
+        redux_choice = print_choices("Do you want to Redux template with basic code structure", choices=["Yes", "No"])
+
+        if redux_choice == 2 :
+            printc("Installing React Modules for Project...")
+            output = subprocess.getoutput(f'npx create-react-app {self.PROJECT_NAME}')
+        else :
+            printc("Installing React Modules with Redux Template for Project...")
+            output = subprocess.getoutput(f'npx create-react-app {self.PROJECT_NAME} --template redux')
+
         os.chdir(self.PROJECT_NAME)
 
         clear()
@@ -218,6 +251,12 @@ class Project :
         return IDE_CHOICES[1], []
 
     def start_backend_django_project(self) :
+        # Check if python is installed
+        installed = subprocess.getoutput('python --version')
+        if installed.strip()[0] != 'Python' :
+            printe("Please make sure you have python installed in your system and have it added to path!")
+            exit(0)
+
         django_app_name = inputc("What is your Django App's Name").lower()
         os.mkdir(self.PROJECT_NAME)
         BASE_DIR = os.getcwd()
@@ -326,14 +365,14 @@ if __name__ == '__main__' :
 
         github_choice = print_choices("Do you want to add the project to remote Github Repository or keep it Local", choices=["Remote Github Repository", "Keep it Local"])
         if github_choice == 1 :
-            printc("Adding to Github")
+            printc("Adding to Github...")
             project.add_to_github(git_ignore)
-            clear()
+            # clear()
 
         else :
             printc("Keeping the Project Local and", end='')
 
-        open_ide(selected_ide)
+        # open_ide(selected_ide)
 
     else :
         printc(base)

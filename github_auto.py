@@ -6,13 +6,13 @@ def push_to_github(project_name, project_description, git_ignore=[]) :
     if not wifi() :
         return False
     
-    try :
-        username = subprocess.check_output('git config user.name', universal_newlines=True).strip()
-    except :
+    # Check if git is installed
+    installed = subprocess.getoutput('git --version')
+    if installed.split()[0] != 'git' :
         print("Please install git first and then try! Keeping repository local")
         return False
 
-    else :
+    else :        
         git_init()
         
         if git_ignore :
@@ -22,7 +22,7 @@ def push_to_github(project_name, project_description, git_ignore=[]) :
         
         git_commit(project_description)
         
-        remote_url = git_add_remote(username, project_name, project_description)
+        remote_url = git_add_remote(project_name, project_description)
         if not remote_url :
             return False
 
@@ -38,8 +38,9 @@ def git_init() :
 def add_ignore(git_ignore) :
     ignore = open('./.gitignore', 'a+')
     for file in git_ignore :
-        ignore.write(file + '/n')
+        ignore.write(file + '\n')
     ignore.close()
+
 
 def git_add() :
     output = subprocess.getoutput('git add .')
@@ -47,13 +48,21 @@ def git_add() :
 def git_commit(project_description) :
     output = subprocess.getoutput(f'git commit -m "Initialised Project with Description: {project_description}"')
 
-def git_add_remote(username, project_name, project_description) :
+def git_add_remote(project_name, project_description) :
+
+    print("Taking github username from git config...")
+    username = subprocess.getoutput('git config user.name')
+    if username :
+        pass
+    else :
+        username = input("Unable to take username from git config. Please enter Github Username = ")
+
     password = input("Enter Github password: ")
 
     repo_attributes = {
         'name': project_name,
-        'desciption': project_description,
-        "homepage": "https://github.com",
+        'description': project_description,
+        "homepage": "https://github.com/ishitb",
         "private": False,
         "has_issues": True,
         "has_projects": True,
