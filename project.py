@@ -37,7 +37,7 @@ PROJECT_BASES = [
     {
         'name': 'React Native App',
         'directory': 'Android/ReactNative',
-        'color': COLORS[1]
+        'color': COLORS[5]
     },
     {
         'name': 'React Website Project',
@@ -53,12 +53,12 @@ PROJECT_BASES = [
         'name': 'Backend Project With Django',
         'directory': 'Backend',
         'color': COLORS[4]
-    },
-    {
-        'name': 'Competitive Programming',
-        'directory': '',
-        'color': COLORS[5]
     }
+    # {
+    #     'name': 'Competitive Programming',
+    #     'directory': '',
+    #     'color': COLORS[5]
+    # }
 ]
 
 IDE_CHOICES = [
@@ -152,7 +152,6 @@ class Project :
 
     def add_to_github(self, git_ignore) :
         git_confirm = push_to_github(self.PROJECT_NAME, self.PROJECT_DESCRIPTION, git_ignore)
-        print(git_confirm)
         if git_confirm :
             printc("Added to Github Successfully")
 
@@ -182,7 +181,7 @@ class Project :
     def start_react_native_project(self) :
         # Check if npm is installed
         installed = subprocess.getoutput('npm version')
-        if installed.split()[1] != 'npm' :
+        if installed.split()[1] != 'npm:' :
             printe("Please make sure you have npm installed on your machine and it is added to path!")
             exit(0)
 
@@ -195,10 +194,20 @@ class Project :
             output = subprocess.getoutput(f'npx react-native init {self.PROJECT_NAME}')
 
         else :
+            # Check if expo is installed
+            installed = subprocess.getoutput('expo --version')
+            try :
+                installed = int(installed.split()[0])
+            except :
+                printe("Please make sure you have expo installed on your system and then try again!")
+                exit(0)
+
             printc("Creating project using Expo CLI...")
             os.system(f'expo init {self.PROJECT_NAME} --npm')
 
         os.chdir(self.PROJECT_NAME)
+
+        output == subprocess.getoutput('npm audit fix')
 
         clear()
 
@@ -227,10 +236,12 @@ class Project :
 
         os.chdir(self.PROJECT_NAME)
 
+        output == subprocess.getoutput('npm audit fix')
+
         clear()
 
         return IDE_CHOICES[1], []
-
+   
     def start_native_web_project(self) :
         os.mkdir(self.PROJECT_NAME)
         os.chdir(self.PROJECT_NAME)
@@ -253,9 +264,11 @@ class Project :
     def start_backend_django_project(self) :
         # Check if python is installed
         installed = subprocess.getoutput('python --version')
-        if installed.strip()[0] != 'Python' :
+        if installed.split()[0] != 'Python' :
             printe("Please make sure you have python installed in your system and have it added to path!")
             exit(0)
+
+        python_command = 'python' if sys.platform == 'win32' else 'python3'
 
         django_app_name = inputc("What is your Django App's Name").lower()
         os.mkdir(self.PROJECT_NAME)
@@ -268,26 +281,27 @@ class Project :
         clear()
         printc("Creating Python VENV...")
         venv_name = 'venv-' + self.PROJECT_NAME.lower()
-        output = subprocess.getoutput(f'python -m venv {venv_name}')
-        venv_pip = os.path.join(venv_name, 'Scripts')
+        output = subprocess.getoutput(f'{python_command} -m venv {venv_name}')
+        venv_pltform = 'Scripts' if sys.platform == 'win32' else 'bin'
+        venv_pip = os.path.join(venv_name, venv_pltform)
         os.chdir(venv_pip)
-        output = subprocess.getoutput('python -m pip install --upgrade pip')
+        output = subprocess.getoutput(f'{os.getcwd()}/python -m pip install --upgrade pip')
 
         clear()
         printc("Installing Django Modules...")
-        output = subprocess.getoutput('pip install django')
+        output = subprocess.getoutput(f'{os.getcwd()}/pip install django')
         if int(rest_framework) != 1 :
             printc("Skipping installing Django Rest Framework")
         else :
-            output = subprocess.getoutput('pip install djangorestframework')
+            output = subprocess.getoutput(f'{os.getcwd()}/pip install djangorestframework')
 
         printc("Creating New Django Project...")
-        output = subprocess.getoutput(f'django-admin startproject {self.PROJECT_NAME} {MAIN_DIR}')
+        output = subprocess.getoutput(f'{os.getcwd()}/django-admin startproject {self.PROJECT_NAME} {MAIN_DIR}')
         
         printc("Adding app to Django Project...")
         DJANGO_APP_DIR = os.path.join(MAIN_DIR, django_app_name)
         os.mkdir(DJANGO_APP_DIR)
-        output = subprocess.getoutput(f'django-admin startapp {django_app_name} {DJANGO_APP_DIR}')
+        output = subprocess.getoutput(f'{os.getcwd()}/django-admin startapp {django_app_name} {DJANGO_APP_DIR}')
 
         os.chdir(MAIN_DIR)
         
@@ -367,12 +381,12 @@ if __name__ == '__main__' :
         if github_choice == 1 :
             printc("Adding to Github...")
             project.add_to_github(git_ignore)
-            # clear()
+            clear()
 
         else :
             printc("Keeping the Project Local and", end='')
 
-        # open_ide(selected_ide)
+        open_ide(selected_ide)
 
     else :
         printc(base)
