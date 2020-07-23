@@ -1,1 +1,0 @@
-# TRY LIBRARY "sty" fro colors

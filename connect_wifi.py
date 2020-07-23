@@ -7,6 +7,7 @@ WIFI STORED IN FORM :
     'ssid': "wifi ssid"
 }
 '''
+
 def try_connecton() :
     for network in SAVED_WIFI_NETWORKS :
         print(f"Trying to Connect to {network['name']}")
@@ -31,3 +32,6 @@ def wifi() :
     
     else :
         return try_connecton()
+
+if __name__ == '__main__' :
+    wifi()

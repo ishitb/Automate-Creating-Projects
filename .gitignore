@@ -1,6 +1,6 @@
-trials.py
-.vscode/settings.json
 testing
+.vscode/settings.json
 ./auth.py
 auth.py
 *.pyc
+ideas.txt

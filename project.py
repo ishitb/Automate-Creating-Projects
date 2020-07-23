@@ -251,8 +251,39 @@ class Project :
         os.mkdir('js')
         os.mkdir('styles')
 
-        shutil.copy2(f'{WEB_STARTER_DIR}/index.html', os.getcwd())
-        shutil.copy2(f'{WEB_STARTER_DIR}/style.css', os.path.join(os.getcwd(), 'styles'))
+        # shutil.copy2(f'{WEB_STARTER_DIR}/index.html', os.getcwd())
+        # shutil.copy2(f'{WEB_STARTER_DIR}/style.css', os.path.join(os.getcwd(), 'styles'))
+
+        html = open('index.html', 'w+')
+        html_starter = '''<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles/style.css">
+    <title>Document</title>
+</head>
+<body>
+    
+
+
+    <script src="js/script.js"></script>
+
+</body>
+</html>
+        '''
+        html.write(html_starter)
+        html.close()
+
+        css_dir = os.path.join(os.getcwd(), 'styles')
+        css = open(f'{css_dir}/style.css', 'w+')
+        css_starter = '''* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}'''
+        css.write(css_starter)
+        css.close()
 
         js = open('js/script.js', 'w+')
         js.close()
@@ -384,7 +415,7 @@ if __name__ == '__main__' :
             clear()
 
         else :
-            printc("Keeping the Project Local and", end='')
+            printc("Keeping the Project Local and", end=' ')
 
         open_ide(selected_ide)
 
