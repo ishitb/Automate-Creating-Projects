@@ -1,6 +1,5 @@
 testing
 .vscode/settings.json
-./auth.py
-auth.py
 *.pyc
 ideas.txt
+utils/auth.py

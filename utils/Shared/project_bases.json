@@ -1,0 +1,27 @@
+[
+    {
+        "name": "Flutter App",
+        "directory": "Android/Flutter_Projects",
+        "color": "red"
+    },
+    {
+        "name": "React Native App",
+        "directory": "Android/ReactNative",
+        "color": "cyan"
+    },
+    {
+        "name": "React Website Project",
+        "directory": "Web/React",
+        "color": "yellow"
+    },
+    {
+        "name": "Basic Native Website Project",
+        "directory": "Web/Native_Web",
+        "color": "blue"
+    },
+    {
+        "name": "Backend Project With Django",
+        "directory": "Backend",
+        "color": "magenta"
+    }
+]

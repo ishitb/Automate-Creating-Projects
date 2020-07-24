@@ -1,23 +1,17 @@
-import os, shutil, subprocess, sys
+import os, shutil, subprocess, sys, json
 from colorama import init 
 from termcolor import colored, cprint
-from github_auto import push_to_github
+from utils.github_auto import push_to_github
+from utils.io import print_choices, printc, printe, inputc
+from utils.Project_Creation import native_web
+from utils.clear import clear
 
 BASE_PATH = 'C:/Users/Lenovo/Desktop/MyPC/Projects/'
 
 if sys.platform == 'linux' :
     BASE_PATH = os.path.join('/', 'mnt', 'c', BASE_PATH[3:])
 
-COLORS = [
-    'red',
-    'white',
-    'yellow',
-    'blue',
-    'magenta',
-    'cyan',
-    'grey',
-    'green',
-]
+COLORS = json.load(open(os.path.join("utils", "Shared", "colors.json")))
 
 MAIN_COLOR = COLORS[7]
 
@@ -28,38 +22,7 @@ CHOICE_COLORS = [
     COLORS[5]
 ]
 
-PROJECT_BASES = [
-    {
-        'name': 'Flutter App',
-        'directory': 'Android/Flutter_Projects',
-        'color': COLORS[0]
-    },
-    {
-        'name': 'React Native App',
-        'directory': 'Android/ReactNative',
-        'color': COLORS[5]
-    },
-    {
-        'name': 'React Website Project',
-        'directory': 'Web/React',
-        'color': COLORS[2]
-    },
-    {
-        'name': 'Basic Native Website Project',
-        'directory': 'Web/Native_Web',
-        'color': COLORS[3]
-    },
-    {
-        'name': 'Backend Project With Django',
-        'directory': 'Backend',
-        'color': COLORS[4]
-    }
-    # {
-    #     'name': 'Competitive Programming',
-    #     'directory': '',
-    #     'color': COLORS[5]
-    # }
-]
+PROJECT_BASES = json.load(open(os.path.join('utils', 'Shared', 'project_bases.json')))
 
 IDE_CHOICES = [
     {
@@ -71,35 +34,6 @@ IDE_CHOICES = [
         'command': 'code .'
     }
 ]
-
-def printc(string, end='\n') : 
-    cprint(string, MAIN_COLOR, end=end)
-
-def printe(string, end='\n') : 
-    cprint(string, COLORS[0], end=end)
-
-def inputc(string, color=MAIN_COLOR, attrs=[], newLine=False) :
-    newLine = '\n' if newLine else ''
-    try :
-        newInput = input(colored(f"{string} {newLine}> ", color, attrs=attrs))
-
-    except :
-        printe("Interrupted!!")
-        exit(0)
-
-    return newInput
-
-def clear() :
-    os.system('clear')
-
-def print_choices(question, choices) :
-    printc(question + '?')
-
-    for choice in range(len(choices)) :
-        printc(choice + 1, end='. ')
-        cprint(choices[choice], CHOICE_COLORS[choice])
-    
-    return int(inputc("Enter your Choice (Enter a Number)"))
 
 def choose_project() :
 
@@ -241,56 +175,59 @@ class Project :
         clear()
 
         return IDE_CHOICES[1], []
-   
+
     def start_native_web_project(self) :
-        os.mkdir(self.PROJECT_NAME)
-        os.chdir(self.PROJECT_NAME)
+        return native_web.build(self.PROJECT_NAME, BASE_PATH, IDE_CHOICES)
+   
+#    def start_native_web_project(self) :
+#         os.mkdir(self.PROJECT_NAME)
+#         os.chdir(self.PROJECT_NAME)
 
-        WEB_STARTER_DIR = os.path.join(BASE_PATH, 'Miscellaneous/Automate-Creating-Projects/web_starter')
+#         WEB_STARTER_DIR = os.path.join(BASE_PATH, 'Miscellaneous/Automate-Creating-Projects/web_starter')
 
-        os.mkdir('js')
-        os.mkdir('styles')
+#         os.mkdir('js')
+#         os.mkdir('styles')
 
-        # shutil.copy2(f'{WEB_STARTER_DIR}/index.html', os.getcwd())
-        # shutil.copy2(f'{WEB_STARTER_DIR}/style.css', os.path.join(os.getcwd(), 'styles'))
+#         # shutil.copy2(f'{WEB_STARTER_DIR}/index.html', os.getcwd())
+#         # shutil.copy2(f'{WEB_STARTER_DIR}/style.css', os.path.join(os.getcwd(), 'styles'))
 
-        html = open('index.html', 'w+')
-        html_starter = '''<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles/style.css">
-    <title>Document</title>
-</head>
-<body>
+#         html = open('index.html', 'w+')
+#         html_starter = '''<!DOCTYPE html>
+# <html lang="en">
+# <head>
+#     <meta charset="UTF-8">
+#     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+#     <link rel="stylesheet" href="styles/style.css">
+#     <title>Document</title>
+# </head>
+# <body>
     
 
 
-    <script src="js/script.js"></script>
+#     <script src="js/script.js"></script>
 
-</body>
-</html>
-        '''
-        html.write(html_starter)
-        html.close()
+# </body>
+# </html>
+#         '''
+#         html.write(html_starter)
+#         html.close()
 
-        css_dir = os.path.join(os.getcwd(), 'styles')
-        css = open(f'{css_dir}/style.css', 'w+')
-        css_starter = '''* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}'''
-        css.write(css_starter)
-        css.close()
+#         css_dir = os.path.join(os.getcwd(), 'styles')
+#         css = open(f'{css_dir}/style.css', 'w+')
+#         css_starter = '''* {
+#     margin: 0;
+#     padding: 0;
+#     box-sizing: border-box;
+# }'''
+#         css.write(css_starter)
+#         css.close()
 
-        js = open('js/script.js', 'w+')
-        js.close()
+#         js = open('js/script.js', 'w+')
+#         js.close()
 
-        clear()
+#         clear()
 
-        return IDE_CHOICES[1], []
+#         return IDE_CHOICES[1], []
 
     def start_backend_django_project(self) :
         # Check if python is installed
@@ -368,7 +305,7 @@ class Project :
 
 if __name__ == '__main__' :
 
-    init()
+    # init()
     
     clear()
     

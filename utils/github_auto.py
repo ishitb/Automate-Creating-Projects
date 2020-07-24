@@ -1,5 +1,5 @@
 import subprocess, requests, json
-from connect_wifi import wifi
+from .connect_wifi import wifi
 from requests.auth import HTTPBasicAuth
 
 def push_to_github(project_name, project_description, git_ignore=[]) :
