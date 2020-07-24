@@ -1,5 +1,6 @@
 import json, colorama, os, sys
 from termcolor import colored, cprint
+from random import uniform
 
 BASE_PATH = 'C:/Users/Lenovo/Desktop/MyPC/Projects/Miscellaneous/Automate-Creating-Projects'
 
@@ -11,8 +12,8 @@ COLORS = json.load(open(os.path.join(BASE_PATH, 'utils', "Shared", "colors.json"
 MAIN_COLOR = COLORS[7]
 
 CHOICE_COLORS = [
-    COLORS[2],
-    COLORS[5]
+    COLORS[int(uniform(0, 7))],
+    COLORS[int(uniform(0, 7))]
 ]
 
 def printc(string, end='\n') : 
