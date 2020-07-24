@@ -1,7 +1,12 @@
-import json, colorama, os
+import json, colorama, os, sys
 from termcolor import colored, cprint
 
-COLORS = json.load(open(os.path.join("utils", "Shared", "colors.json")))
+BASE_PATH = 'C:/Users/Lenovo/Desktop/MyPC/Projects/Miscellaneous/Automate-Creating-Projects'
+
+if sys.platform == 'linux' :
+    BASE_PATH = os.path.join('/', 'mnt', 'c', BASE_PATH[3:])
+
+COLORS = json.load(open(os.path.join(BASE_PATH, 'utils', "Shared", "colors.json")))
 
 MAIN_COLOR = COLORS[7]
 

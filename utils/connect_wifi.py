@@ -1,5 +1,5 @@
 import socket, subprocess, time
-from auth import SAVED_WIFI_NETWORKS
+# from auth import SAVED_WIFI_NETWORKS
 '''
 WIFI STORED IN FORM :
 {
@@ -31,7 +31,14 @@ def wifi() :
         return True
     
     else :
-        return try_connecton()
+        # return try_connecton()
+        input("Please make sure you have Internet connection and then Press Enter")
+        return wifi()
 
 if __name__ == '__main__' :
-    wifi()
+    wifi = wifi()
+    if wifi :
+        print("Connected to WiFi!")
+    else :
+        print(wifi)
+        print("There is an issue with the WiFi connection. Please try to fix your connection.")
