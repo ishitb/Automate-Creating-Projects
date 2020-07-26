@@ -1,6 +1,7 @@
 import subprocess, os
 from utils.custom_io import printc, printe, print_choices
 from utils.clear import clear
+from utils.loader import loader_module
 
 def build(PROJECT_NAME, IDE_CHOICES) :
     # Check if npm is installed
@@ -16,16 +17,17 @@ def build(PROJECT_NAME, IDE_CHOICES) :
     
     redux_choice = print_choices("Do you want to Redux template with basic code structure", choices=["Yes", "No"])
 
-    if redux_choice == 2 :
-        printc("Installing React Modules for Project...")
-        output = subprocess.getoutput(f'npx create-react-app {PROJECT_NAME}')
-    else :
-        printc("Installing React Modules with Redux Template for Project...")
-        output = subprocess.getoutput(f'npx create-react-app {PROJECT_NAME} --template redux')
+    loading_string = "Installing React Modules for Project"
+    command = f'npx create-react-app {PROJECT_NAME}'
+    if redux_choice == 1 :
+        loading_string = "Installing React Modules with Redux Template for Project..."
+        command += ' --template redux'
+
+    loader_module(command, loading_string)
 
     os.chdir(PROJECT_NAME)
 
-    output = subprocess.getoutput('npm audit fix')
+    loader_module('npm audit fix')
 
     clear()
 

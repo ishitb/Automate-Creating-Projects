@@ -7,7 +7,7 @@ BASE_PATH = 'C:/Users/Lenovo/Desktop/MyPC/Projects/Miscellaneous/Automate-Creati
 if sys.platform == 'linux' :
     BASE_PATH = os.path.join('/', 'mnt', 'c', BASE_PATH[3:])
 
-COLORS = json.load(open(os.path.join(BASE_PATH, 'utils', "Shared", "colors.json")))
+COLORS = json.load(open(os.path.join(os.path.dirname(__file__), "Shared", "colors.json")))
 
 MAIN_COLOR = COLORS[7]
 
@@ -38,6 +38,6 @@ def print_choices(question, choices) :
 
     for choice in range(len(choices)) :
         printc(choice + 1, end='. ')
-        cprint(choices[choice], CHOICE_COLORS[choice])
+        cprint(choices[choice], COLORS[int(uniform(0, 7))])
     
     return int(inputc("Enter your Choice (Enter a Number)"))

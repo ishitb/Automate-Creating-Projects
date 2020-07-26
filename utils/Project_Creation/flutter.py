@@ -1,6 +1,7 @@
-import os, subprocess
+import os, subprocess, threading
 from utils.clear import clear
 from utils.custom_io import printe, print_choices, printc
+from utils.loader import loader_module
 
 def build(PROJECT_NAME, IDE_CHOICES) :
 
@@ -12,8 +13,12 @@ def build(PROJECT_NAME, IDE_CHOICES) :
         printe("Please make sure you have followed the instructions to install flutter on your system and then proceed!")
         exit(0)
 
-    printc("Installing Flutter Modules...")
-    creation =  subprocess.getoutput(f'flutter create {PROJECT_NAME}')
+    # t = threading.Thread(target=loader.load, args=("Installing Flutter Modules",))
+    # t.start()
+    # creation =  subprocess.getoutput(f'flutter create {PROJECT_NAME}')
+    # loader.stop()
+    # t.join()
+    loader_module(f'flutter create {PROJECT_NAME}', "Installing Flutter Modules")
 
     os.chdir(PROJECT_NAME)
 

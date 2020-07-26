@@ -1,6 +1,7 @@
 import subprocess, os, sys
 from utils.clear import clear
 from utils.custom_io import printc, printe, print_choices, inputc
+from utils.loader import loader_module
 
 def build(PROJECT_NAME, IDE_CHOICES) :
     # Check if python is installed
@@ -20,29 +21,27 @@ def build(PROJECT_NAME, IDE_CHOICES) :
     rest_framework = print_choices("Do you want Django Rest Framework Added (Will have to enter in settings.py manually)", choices=["Yes (default)", "No"])
 
     clear()
-    printc("Creating Python VENV...")
     venv_name = 'venv-' + PROJECT_NAME.lower()
-    output = subprocess.getoutput(f'{python_command} -m venv {venv_name}')
+    loader_module(f'{python_command} -m venv {venv_name}', "Creating Python VENV")
+    # output = subprocess.getoutput(f'{python_command} -m venv {venv_name}')
     venv_pltform = 'Scripts' if sys.platform == 'win32' else 'bin'
     venv_pip = os.path.join(venv_name, venv_pltform)
     os.chdir(venv_pip)
     output = subprocess.getoutput(f'{os.getcwd()}/python -m pip install --upgrade pip')
 
     clear()
-    printc("Installing Django Modules...")
-    output = subprocess.getoutput(f'{os.getcwd()}/pip install django')
+    command = f'{os.getcwd()}/pip install django'
     if int(rest_framework) != 1 :
         printc("Skipping installing Django Rest Framework")
     else :
-        output = subprocess.getoutput(f'{os.getcwd()}/pip install djangorestframework')
+        command = command + " djangorestframework"
+    loader_module(command, "Installing Django Modules")
 
-    printc("Creating New Django Project...")
-    output = subprocess.getoutput(f'{os.getcwd()}/django-admin startproject {PROJECT_NAME} {MAIN_DIR}')
+    loader_module(f'{os.getcwd()}/django-admin startproject {PROJECT_NAME} {MAIN_DIR}', "Creating New Django Project")
     
-    printc("Adding app to Django Project...")
     DJANGO_APP_DIR = os.path.join(MAIN_DIR, django_app_name)
     os.mkdir(DJANGO_APP_DIR)
-    output = subprocess.getoutput(f'{os.getcwd()}/django-admin startapp {django_app_name} {DJANGO_APP_DIR}')
+    loader_module(f'{os.getcwd()}/django-admin startapp {django_app_name} {DJANGO_APP_DIR}', "Adding app to Django Project")
 
     os.chdir(MAIN_DIR)
     

@@ -11,18 +11,15 @@ BASE_PATH = 'C:/Users/Lenovo/Desktop/MyPC/Projects/'
 if sys.platform == 'linux' :
     BASE_PATH = os.path.join('/', 'mnt', 'c', BASE_PATH[3:])
 
-COLORS = json.load(open(os.path.join("utils", "Shared", "colors.json")))
+THIS_PATH = os.path.dirname(__file__)
+
+COLORS = json.load(open(os.path.join(THIS_PATH, "utils", "Shared", "colors.json")))
 
 MAIN_COLOR = COLORS[7]
 
 BACKGROUND_COLORS = [f"on_{color}" for color in COLORS ]
 
-CHOICE_COLORS = [
-    COLORS[2],
-    COLORS[5]
-]
-
-PROJECT_BASES = json.load(open(os.path.join('utils', 'Shared', 'project_bases.json')))
+PROJECT_BASES = json.load(open(os.path.join(THIS_PATH, 'utils', 'Shared', 'project_bases.json')))
 
 IDE_CHOICES = [
     {
