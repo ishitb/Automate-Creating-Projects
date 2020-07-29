@@ -417,8 +417,6 @@ class Project :
         os.mkdir(self.PROJECT_NAME)
         os.chdir(self.PROJECT_NAME)
 
-        WEB_STARTER_DIR = os.path.join(BASE_PATH, 'Miscellaneous/Automate-Creating-Projects/web_starter')
-
         os.mkdir('js')
         os.mkdir('styles')
 
@@ -522,8 +520,11 @@ if __name__ == '__main__' :
             BASE_PATH = inputc("Please enter the path where you want the Projects folder? (Default - 'Desktop')")
             if BASE_PATH == "" :
                 BASE_PATH = os.environ['HOME']
+                os.chdir(os.path.join(BASE_PATH, 'Desktop'))
+                BASE_PATH = 'Projects'
+                os.mkdir(BASE_PATH)
             if not os.path.exists(BASE_PATH) :
-                print("Please print a valid path!")
+                print("Path doesn't exist! Please print a valid path!")
                 continue
             break
     os.chdir(BASE_PATH)
@@ -541,6 +542,8 @@ if __name__ == '__main__' :
     print()
 
     if base != "Competitive Programming" :
+        if not os.path.exists(directory) :
+            os.makedirs(directory)
         os.chdir(directory)
 
         project = Project(base, directory, color)
