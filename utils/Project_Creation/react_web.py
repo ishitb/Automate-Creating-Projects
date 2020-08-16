@@ -12,10 +12,10 @@ def build(PROJECT_NAME, IDE_CHOICES) :
 
     clear()
 
-    printe("Changing name to all lower case leeter due to ReactJS guidelines...")
+    printe("Changing name to all lower case letter due to ReactJS guidelines...")
     PROJECT_NAME = PROJECT_NAME.lower()
     
-    redux_choice = print_choices("Do you want to Redux template with basic code structure", choices=["Yes", "No"])
+    redux_choice = print_choices("Do you want to add Redux template with basic code structure", choices=["Yes", "No"])
 
     loading_string = "Installing React Modules for Project"
     command = f'npx create-react-app {PROJECT_NAME}'

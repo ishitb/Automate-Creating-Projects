@@ -12,7 +12,7 @@ def build(PROJECT_NAME, IDE_CHOICES) :
 
     python_command = 'python' if sys.platform == 'win32' else 'python3'
 
-    django_app_name = inputc("What is your Django App's Name").lower()
+    django_app_name = inputc("What is your Django App's Name").lower().replace(' ', '_')
     os.mkdir(PROJECT_NAME)
     BASE_DIR = os.getcwd()
     MAIN_DIR = os.path.join(BASE_DIR, PROJECT_NAME)

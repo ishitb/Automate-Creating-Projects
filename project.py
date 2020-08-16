@@ -28,7 +28,7 @@ IDE_CHOICES = [
     },
     {
         'name': "VS Code",
-        'command': 'code .'
+        'command': 'code . & exit'
     }
 ]
 
@@ -77,8 +77,16 @@ class Project :
         cprint(self.PROJECT_NAME, self.PROJECT_COLOR)
 
     def add_readme(self) :
-        readme = open('README.md', 'w+')
-        readme.write(self.PROJECT_DESCRIPTION)
+        readme = open('README.md', 'r+')
+        current_readme = readme.read()
+        readme = open('README.md', 'a+')
+        readme.write(
+            f'''
+            # {self.PROJECT_NAME}\n
+            {self.PROJECT_DESCRIPTION}\#
+            {current_readme}
+            '''
+        )
         readme.close()
 
     def add_to_github(self, git_ignore) :

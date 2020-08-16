@@ -11,17 +11,17 @@
     },
     {
         "name": "React Website Project",
-        "directory": "Web/React",
+        "directory": "Frontend/React",
         "color": "yellow"
     },
     {
         "name": "Basic Native Website Project",
-        "directory": "Web/Native_Web",
+        "directory": "Frontend/Native_Web",
         "color": "blue"
     },
     {
         "name": "Backend Project With Django",
-        "directory": "Backend",
+        "directory": "Backend/Django",
         "color": "magenta"
     }
 ]
