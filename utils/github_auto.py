@@ -1,6 +1,6 @@
-import subprocess, requests, json
+import subprocess, requests, json, os
 from .connect_wifi import wifi
-from requests.auth import HTTPBasicAuth
+from .auth import GITHUB_TOKEN
 
 def push_to_github(project_name, project_description, git_ignore=[]) :
     if not wifi() :
@@ -50,20 +50,13 @@ def git_commit(project_description) :
 
 def git_add_remote(project_name, project_description) :
 
-    print("Taking github username from git config...")
-    username = subprocess.getoutput('git config user.name')
-    if username :
-        pass
-    else :
-        username = input("Unable to take username from git config. Please enter Github Username = ")
-
-    password = input("Enter Github password: ")
+    print("Using SSH to create remote...")
 
     repo_attributes = {
         'name': project_name,
         'description': project_description,
         "homepage": "https://github.com/ishitb",
-        "private": False,
+        "private": True,
         "has_issues": True,
         "has_projects": True,
         "has_wiki": True
@@ -72,7 +65,9 @@ def git_add_remote(project_name, project_description) :
     response = requests.post(
         'https://api.github.com/user/repos',
         data = json.dumps(repo_attributes),
-        auth = HTTPBasicAuth(username, password)
+        headers = {
+            'Authorization': f'token {GITHUB_TOKEN}'
+        }
     )
 
     if response.status_code == 201 :

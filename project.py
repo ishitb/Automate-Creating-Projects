@@ -29,7 +29,7 @@ IDE_CHOICES = [
     },
     {
         'name': 'VS Code',
-        'command': 'code . & exit'
+        'command': 'code-insiders . & exit'
     }
 ]
 
@@ -78,9 +78,12 @@ class Project :
         cprint(self.PROJECT_NAME, self.PROJECT_COLOR)
 
     def add_readme(self) :
-        readme = open('README.md', 'r+')
-        current_readme = readme.read()
-        readme = open('README.md', 'a+')
+        try :
+            readme = open('README.md', 'r+')
+            current_readme = readme.read()
+        except :
+            current_readme = ''
+        readme = open('README.md', 'w+')
         readme.write(
             f'''
             # {self.PROJECT_NAME}\n
