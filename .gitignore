@@ -3,3 +3,4 @@ testing
 *.pyc
 ideas.txt
 utils/auth.py
+venv
