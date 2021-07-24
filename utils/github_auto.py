@@ -77,10 +77,11 @@ def git_add_remote(project_name, project_description) :
         return False
 
 def git_connect_remote(remote_url) :
+    output = subprocess.getoutput('git branch -M main')
     output = subprocess.getoutput(f'git remote add origin {remote_url}')
 
 def git_push() :
-    output = subprocess.getoutput('git push -u origin master')
+    output = subprocess.getoutput('git push -u origin main')
 
 if __name__ == '__main__' :
     commit_message = input("Enter a Commit Message: ")
